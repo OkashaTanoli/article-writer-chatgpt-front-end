@@ -1,91 +1,44 @@
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import styles from './page.module.css'
+'use client'
 
-const inter = Inter({ subsets: ['latin'] })
+import Image from 'next/image'
+import styles from './page.module.css'
+import Img from '@/public/hero.png'
+import Link from 'next/link'
+import { useContext, useEffect } from 'react'
+import Cookies from 'js-cookie'
+import { IContext } from '@/types'
+import { ContextApi } from '@/store/context'
+
 
 export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
+    const { state, dispatch }: IContext = useContext(ContextApi)
+
+    useEffect(() => {
+        const user = Cookies.get('userData')
+        if (user) {
+            const parsed_user = JSON.parse(user)
+            console.log(parsed_user)
+            dispatch({ type: 'AUTH', payload: parsed_user })
+        }
+    }, [dispatch])
+
+    return (
         <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+            <div className={`pt-10`}>
+                <div className='w-[1300px] xl:w-[90%] flex lg-md:block justify-between items-center gap-10 m-auto'>
+                    <div className='w-1/2 lg-md:w-full'>
+                        <h1 className='text-4xl text-main font-bold'>ONEclick Writer</h1>
+                        <p className='text-zinc-800 font-semibold mt-5'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Et iusto nihil vel aliquid id veritatis corrupti nemo debitis repellendus corporis, doloremque iure veniam accusamus commodi soluta minus harum suscipit distinctio!</p>
+                        <div className='flex gap-10 mt-10 sm:block'>
+                            <Link href={'/signup'}><button className='py-4 text-white text-sm tracking-widest w-[200px] sm:w-full mb-5 text-center bg-blue-500'>JOIN NOW</button></Link>
+                            <Link href={'/login'}><button className='py-4 text-white text-sm tracking-widest w-[200px] sm:w-full mb-5 text-center bg-blue-500'>LOGIN</button></Link>
+                        </div>
+                    </div>
+                    <div className='flex items-end w-1/2 lg-md:w-full'>
+                        <Image src={Img} alt='hero' className='w-[90%] lg-md:w-full' />
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    )
 }
