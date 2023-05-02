@@ -279,6 +279,10 @@ function Dashboard() {
 
 
     const handleGenerate = () => {
+        if(keywords.length === 0){
+            alert('Enter atleast one keyword')
+            return
+        }
 
         setLoading(true)
         setSelectedArticles([])
