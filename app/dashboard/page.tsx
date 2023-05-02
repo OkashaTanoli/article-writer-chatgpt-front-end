@@ -9,9 +9,7 @@ import { ImCross } from 'react-icons/im'
 import { FaCheck } from 'react-icons/fa'
 import { RxCross2 } from 'react-icons/rx'
 import { BiTimeFive } from 'react-icons/bi'
-// import XLSX from 'xlsx'
 import readXlsxFile from 'read-excel-file'
-// import { Select, useDisclosure } from '@chakra-ui/react'
 import { EditModadl, Loader } from '@/components';
 import moment from 'moment';
 import EditGeneratedModal from '@/components/editgeneratedmodal';
@@ -47,7 +45,7 @@ function Dashboard() {
     const [error, setError] = useState('')
     const [articles, setArticles] = useState<any[]>([])
     const [articlesHistory, setArticlesHistory] = useState<any[]>([])
-    const [options, setOptions] = useState<string[]>([])
+    // const [options, setOptions] = useState<string[]>([])
     const [selectedArticles, setSelectedArticles] = useState<string[]>([])
     const [selectedHistoryArticles, setSelectedHistoryArticles] = useState<string[]>([])
     const [loading, setLoading] = useState(false)
@@ -57,8 +55,8 @@ function Dashboard() {
     const [editModalData, setEditModalData] = useState<any>()
     const [editModalGeneratedIndex, setEditModalGeneratedIndex] = useState<any>()
 
-    const [numberOfArticles, setNumberOfArticles] = useState<number>(1)
-    const [lengthOfArticles, setLengthOfArticles] = useState<string>('small')
+    // const [numberOfArticles, setNumberOfArticles] = useState<number>(1)
+    const [lengthOfArticles, setLengthOfArticles] = useState<string>('medium')
 
 
     function getArticlesHistory(token: string | undefined) {
@@ -147,15 +145,15 @@ function Dashboard() {
     }
 
 
-    const handleOptions = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.checked) {
-            setOptions([...options, e.target.value])
-        }
-        else {
-            const filtered = options.filter((val) => val !== e.target.value)
-            setOptions(filtered)
-        }
-    }
+    // const handleOptions = (e: ChangeEvent<HTMLInputElement>) => {
+    //     if (e.target.checked) {
+    //         setOptions([...options, e.target.value])
+    //     }
+    //     else {
+    //         const filtered = options.filter((val) => val !== e.target.value)
+    //         setOptions(filtered)
+    //     }
+    // }
 
 
     const handleSelectedArticles = (e: ChangeEvent<HTMLInputElement>) => {
@@ -192,45 +190,158 @@ function Dashboard() {
 
 
 
+    // const handleGenerate = () => {
+    //     let finalKeywords = ''
+    //     for (let i = 0; i < keywords.length; i++) {
+    //         finalKeywords += `${keywords[i].text}, `
+    //     }
+    //     // const finalPrompt = `Using the list of keywords mentioned below create ${options.join(', ')} ${promptText ? `and ${promptText}` : ''} and ${lengthOfArticles} article of ${lengthOfArticles === 'small' ? 500 : lengthOfArticles === 'medium' ? 1000 : lengthOfArticles === 'very large' ? 2000 : 1000}. The list of keywords is here: ${finalKeywords}`
+    //     const finalPrompt = `${promptText} and the length of article should be ${lengthOfArticles} and the article should use the following kwywords ${finalKeywords}`
+    //     setLoading(true)
+    //     setSelectedArticles([])
+    //     setArticles([])
+    //     // fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/createarticle`, {
+    //     //     method: 'POST',
+    //     //     headers: {
+    //     //         "Content-Type": "application/json",
+    //     //         Authorization: `Bearer ${state.user?.token}`
+    //     //     },
+    //     //     body: JSON.stringify({ prompt: finalPrompt, length: lengthOfArticles, number: numberOfArticles })
+    //     // })
+    //     //     .then((res) => res.json())
+    //     //     .then((data) => {
+    //     //         if (data.status === 'error') {
+    //     //             setError(data.error.message)
+    //     //             return
+    //     //         }
+    //     //         setArticles(data.data.choices)
+    //     //         console.log(articles)
+    //     //     })
+    //     //     .catch((err) => {
+    //     //         alert(err)
+    //     //     })
+    //     //     .finally(() => {
+    //     //         setLoading(false)
+    //     //     })
+
+
+
+    //     const length = lengthOfArticles === 'small' ? 500 : lengthOfArticles === 'medium' ? 2000 : lengthOfArticles === 'very large' ? 3500 : 2000
+    //     fetch(`https://api.openai.com/v1/completions`, {
+    //         method: 'POST',
+    //         headers: {
+    //             Authorization: `Bearer ${state.user?.key}`,
+    //             "Content-Type": "application/json"
+    //         },
+    //         body: JSON.stringify({
+    //             model: 'text-davinci-003',
+    //             prompt: finalPrompt,
+    //             max_tokens: length,
+    //             n: numberOfArticles
+    //         })
+    //     })
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             if (data.error) {
+    //                 setError(data.error.message)
+    //                 return
+    //             }
+    //             setArticles(data.choices)
+    //             console.log(articles)
+    //         })
+    //         .catch((err) => {
+    //             alert(err)
+    //         })
+    //         .finally(() => {
+    //             setLoading(false)
+    //         })
+    // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     const handleGenerate = () => {
-        let finalKeywords = ''
-        for (let i = 0; i < keywords.length; i++) {
-            finalKeywords += `${keywords[i].text}, `
-        }
-        const finalPrompt = `Using the list of keywords mentioned below create ${options.join(', ')} ${promptText ? `and ${promptText}` : ''} and ${lengthOfArticles} article. The list of keywords is here: ${finalKeywords}`
-        // console.log(finalPrompt)
+
         setLoading(true)
         setSelectedArticles([])
         setArticles([])
-        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/createarticle`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${state.user?.token}`
-            },
-            body: JSON.stringify({ prompt: finalPrompt, length: lengthOfArticles, number: numberOfArticles })
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.status === 'error') {
-                    setError(data.error.message)
-                    return
-                }
-                setArticles(data.data.choices)
-                console.log(articles)
+        let n = 0
+
+        for (let i = 0; i < keywords.length; i++) {
+            // function callApi(n = 0) {
+            const length = lengthOfArticles === 'medium' ? 1000 : lengthOfArticles === 'very large' ? 3500 : 2000
+            const finalPrompt = `${promptText}. Generate ${lengthOfArticles} article of ${lengthOfArticles === 'medium' ? '1200' : lengthOfArticles === 'very large' ? '3000' : '1500'} words using the keyword "${keywords[i].text}, with multiple paragraphs"`
+            fetch(`https://api.openai.com/v1/completions`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${state.user?.key}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model: 'text-davinci-003',
+                    prompt: finalPrompt,
+                    max_tokens: length,
+                    n: 1
+                })
             })
-            .catch((err) => {
-                alert(err)
-            })
-            .finally(() => {
-                setLoading(false)
-            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.error) {
+                        setError(data.error.message)
+                        return
+                    }
+                    setArticles((prev) => [...prev, data.choices[0]])
+                })
+                .catch((err) => {
+                    alert(err)
+                })
+                .finally(() => {
+                    n += 1
+                    if (n === keywords.length) {
+                        setLoading(false)
+                        // return
+                    }
+                    // callApi(n + 1)
+                })
+            // }
+            // callApi()
+        }
     }
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     const saveArticles = () => {
-        // console.log(selectedArticles)
         setSaveLoading(true)
         fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/articleshistory`, {
             method: 'POST',
@@ -245,7 +356,6 @@ function Dashboard() {
                 if (!data.status) {
                     return alert('error')
                 }
-                // console.log(data)
                 setSaveSuccess(true)
                 setTimeout(() => {
                     setSaveSuccess(false)
@@ -337,22 +447,22 @@ function Dashboard() {
 
                     <div className='mt-5'>
                         <h1 className='text-2xl text-main font-bold'>Prompt</h1>
-                        <input type="text" onChange={(e) => setPromptText(e.target.value)} className='w-full py-3 px-5 border border-zinc-300 rounded-lg mt-3' placeholder='Enter Propmt' />
-                        <div className='mt-5'>
+                        <input type="text" onChange={(e) => setPromptText(e.target.value)} className='w-full py-3 px-5 border border-zinc-300 rounded-lg mt-3' placeholder='Enter Prompt' />
+                        {/* <div className='mt-5'>
                             <div><input type="checkbox" value={'title'} onChange={handleOptions} id="title" /><label htmlFor="title" className='ml-3'>Title</label></div>
                             <div><input type="checkbox" value={'frequently asked questions'} onChange={handleOptions} id="faq" /><label htmlFor="faq" className='ml-3'>FAQ</label></div>
                             <div><input type="checkbox" value={'5 bullet points'} onChange={handleOptions} id="bullets" /><label htmlFor="bullets" className='ml-3'>Bullet Points</label></div>
                             <div><input type="checkbox" value={'summary'} onChange={handleOptions} id="summary" /><label htmlFor="summary" className='ml-3'>Summary</label></div>
-                        </div>
+                        </div> */}
                         <div className='mt-5'>
                             <h1 className='text-zinc-800 font-bold mb-3'>Select length of article</h1>
                             <select value={lengthOfArticles} onChange={(e) => setLengthOfArticles(e.target.value)} className='border border-zinc-300 rounded-xl py-2 px-10'>
-                                <option value="small">small</option>
+                                {/* <option value="small">small</option> */}
                                 <option value="medium">medium</option>
                                 <option value="very large">large</option>
                             </select>
                         </div>
-                        <div className='mt-5'>
+                        {/* <div className='mt-5'>
                             <h1 className='text-zinc-800 font-bold mb-3'>Select number of articles you want to generate (max = 10)</h1>
                             <select value={numberOfArticles} onChange={(e) => setNumberOfArticles(Number(e.target.value))} name="" id="" className='border border-zinc-300 rounded-xl py-2 px-10'>
                                 <option value="1">1</option>
@@ -366,9 +476,13 @@ function Dashboard() {
                                 <option value="8">8</option>
                                 <option value="10">10</option>
                             </select>
-                        </div>
+                        </div> */}
                     </div>
                     <button onClick={handleGenerate} disabled={loading} className='h-[50px] w-[200px] text-center bg-main rounded-lg text-sm text-white font-bold mt-5'>{loading ? <Loader height='h-4' width='w-4' /> : 'Generate Article'}</button>
+                    {
+                        loading &&
+                        <h1 className='text-zinc-800 font-semibold'>Note: Generating {keywords.length} articles. This may take sometime. Please have patience</h1>
+                    }
                     {
                         error &&
                         <div className='text-red-700 text-sm font-semibold mt-3 flex justify-between'>{error} <RxCross2 size={25} className='text-zinc-800 cursor-pointer' onClick={() => setError('')} /></div>
