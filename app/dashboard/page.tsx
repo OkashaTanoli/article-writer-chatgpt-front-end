@@ -279,7 +279,7 @@ function Dashboard() {
 
 
     const handleGenerate = () => {
-        if(keywords.length === 0){
+        if (keywords.length === 0) {
             alert('Enter atleast one keyword')
             return
         }
@@ -375,12 +375,30 @@ function Dashboard() {
     function exportAsXML(articles: string[]) {
         let xmlContent = ''
         for (let i = 0; i < articles.length; i++) {
-            xmlContent += `<article>
-            ${articles[i]}
-                           </article>`
+            xmlContent += `
+                        <item>
+                            <title><![CDATA[This is an Article]]></title>
+                            <dc:creator><![CDATA[wpx_]]></dc:creator>
+                            <description></description>
+                            <content:encoded><![CDATA[<!-- wp:paragraph --><p>${articles[i]}</p><!-- /wp:paragraph -->]]></content:encoded>
+                            <excerpt:encoded><![CDATA[]]></excerpt:encoded>
+                        </item>    
+                        `
         }
-        const content = `<?xml version="1.0" encoding="utf-8"?><!DOCTYPE root><root>${xmlContent}</root>`;
-        const file = new Blob([xmlContent], { type: 'text/xml' });
+        const content = `<?xml version="1.0" encoding="utf-8"?><!DOCTYPE root>
+                            <rss version="2.0"
+                                xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+                                xmlns:content="http://purl.org/rss/1.0/modules/content/"
+                                xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+                                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                                xmlns:wp="http://wordpress.org/export/1.2/"
+                            >
+                                <channel>
+                                    <wp:wxr_version>1.2</wp:wxr_version>
+                                    ${xmlContent}
+                                </channel>
+                            </rss>`;
+        const file = new Blob([content], { type: 'text/xml' });
         saveAs(file, 'article.xml');
         console.log(content)
     }
