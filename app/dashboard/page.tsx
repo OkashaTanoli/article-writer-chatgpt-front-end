@@ -46,8 +46,8 @@ function Dashboard() {
     const [articles, setArticles] = useState<any[]>([])
     const [articlesHistory, setArticlesHistory] = useState<any[]>([])
     // const [options, setOptions] = useState<string[]>([])
-    const [selectedArticles, setSelectedArticles] = useState<string[]>([])
-    const [selectedHistoryArticles, setSelectedHistoryArticles] = useState<string[]>([])
+    const [selectedArticles, setSelectedArticles] = useState<any[]>([])
+    const [selectedHistoryArticles, setSelectedHistoryArticles] = useState<any[]>([])
     const [loading, setLoading] = useState(false)
     const [saveLoading, setSaveLoading] = useState(false)
     const [articleHistoryLoading, setArticleHistoryLoading] = useState(true)
@@ -157,21 +157,24 @@ function Dashboard() {
 
 
     const handleSelectedArticles = (e: ChangeEvent<HTMLInputElement>) => {
+        let data = e.target.value.split('(^^^)')
         if (e.target.checked) {
-            setSelectedArticles([...selectedArticles, e.target.value])
+            setSelectedArticles([...selectedArticles, { title: data[0], text: data[1] }])
+            console.log(e.target.value)
         }
         else {
-            const filtered = selectedArticles.filter((val) => val !== e.target.value)
+            const filtered = selectedArticles.filter((val) => val.title !== data[0])
             setSelectedArticles(filtered)
         }
     }
 
     const handleSelectedHistoryArticles = (e: ChangeEvent<HTMLInputElement>) => {
+        let data = e.target.value.split('(^^^)')
         if (e.target.checked) {
-            setSelectedHistoryArticles([...selectedHistoryArticles, e.target.value])
+            setSelectedHistoryArticles([...selectedHistoryArticles, { title: data[0], text: data[1] }])
         }
         else {
-            const filtered = selectedHistoryArticles.filter((val) => val !== e.target.value)
+            const filtered = selectedHistoryArticles.filter((val) => val.title !== data[0])
             setSelectedHistoryArticles(filtered)
         }
     }
@@ -190,92 +193,6 @@ function Dashboard() {
 
 
 
-    // const handleGenerate = () => {
-    //     let finalKeywords = ''
-    //     for (let i = 0; i < keywords.length; i++) {
-    //         finalKeywords += `${keywords[i].text}, `
-    //     }
-    //     // const finalPrompt = `Using the list of keywords mentioned below create ${options.join(', ')} ${promptText ? `and ${promptText}` : ''} and ${lengthOfArticles} article of ${lengthOfArticles === 'small' ? 500 : lengthOfArticles === 'medium' ? 1000 : lengthOfArticles === 'very large' ? 2000 : 1000}. The list of keywords is here: ${finalKeywords}`
-    //     const finalPrompt = `${promptText} and the length of article should be ${lengthOfArticles} and the article should use the following kwywords ${finalKeywords}`
-    //     setLoading(true)
-    //     setSelectedArticles([])
-    //     setArticles([])
-    //     // fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/createarticle`, {
-    //     //     method: 'POST',
-    //     //     headers: {
-    //     //         "Content-Type": "application/json",
-    //     //         Authorization: `Bearer ${state.user?.token}`
-    //     //     },
-    //     //     body: JSON.stringify({ prompt: finalPrompt, length: lengthOfArticles, number: numberOfArticles })
-    //     // })
-    //     //     .then((res) => res.json())
-    //     //     .then((data) => {
-    //     //         if (data.status === 'error') {
-    //     //             setError(data.error.message)
-    //     //             return
-    //     //         }
-    //     //         setArticles(data.data.choices)
-    //     //         console.log(articles)
-    //     //     })
-    //     //     .catch((err) => {
-    //     //         alert(err)
-    //     //     })
-    //     //     .finally(() => {
-    //     //         setLoading(false)
-    //     //     })
-
-
-
-    //     const length = lengthOfArticles === 'small' ? 500 : lengthOfArticles === 'medium' ? 2000 : lengthOfArticles === 'very large' ? 3500 : 2000
-    //     fetch(`https://api.openai.com/v1/completions`, {
-    //         method: 'POST',
-    //         headers: {
-    //             Authorization: `Bearer ${state.user?.key}`,
-    //             "Content-Type": "application/json"
-    //         },
-    //         body: JSON.stringify({
-    //             model: 'text-davinci-003',
-    //             prompt: finalPrompt,
-    //             max_tokens: length,
-    //             n: numberOfArticles
-    //         })
-    //     })
-    //         .then((res) => res.json())
-    //         .then((data) => {
-    //             if (data.error) {
-    //                 setError(data.error.message)
-    //                 return
-    //             }
-    //             setArticles(data.choices)
-    //             console.log(articles)
-    //         })
-    //         .catch((err) => {
-    //             alert(err)
-    //         })
-    //         .finally(() => {
-    //             setLoading(false)
-    //         })
-    // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     const handleGenerate = () => {
@@ -290,7 +207,6 @@ function Dashboard() {
         let n = 0
 
         for (let i = 0; i < keywords.length; i++) {
-            // function callApi(n = 0) {
             const length = lengthOfArticles === 'medium' ? 1000 : lengthOfArticles === 'very large' ? 3500 : 2000
             const finalPrompt = `${promptText}. Generate ${lengthOfArticles} article of ${lengthOfArticles === 'medium' ? '1200' : lengthOfArticles === 'very large' ? '3000' : '1500'} words using the keyword "${keywords[i].text}, with multiple paragraphs"`
             fetch(`https://api.openai.com/v1/completions`, {
@@ -312,7 +228,7 @@ function Dashboard() {
                         setError(data.error.message)
                         return
                     }
-                    setArticles((prev) => [...prev, data.choices[0]])
+                    setArticles((prev) => [...prev, { title: keywords[i].text, text: data.choices[0].text }])
                 })
                 .catch((err) => {
                     alert(err)
@@ -321,16 +237,10 @@ function Dashboard() {
                     n += 1
                     if (n === keywords.length) {
                         setLoading(false)
-                        // return
                     }
-                    // callApi(n + 1)
                 })
-            // }
-            // callApi()
         }
     }
-
-
 
 
 
@@ -372,16 +282,16 @@ function Dashboard() {
     }
 
 
-    function exportAsXML(articles: string[]) {
+    function exportAsXML(articles: any[]) {
         let xmlContent = ''
         for (let i = 0; i < articles.length; i++) {
             xmlContent += `
                         <item>
-                            <title><![CDATA[history of pakistan ]]></title>
+                            <title><![CDATA[${articles[i].title}]]></title>
                             <pubDate>Wed, 28 Dec 2022 20:55:39 +0000</pubDate>
                             <dc:creator><![CDATA[wpx_]]></dc:creator>
                             <description></description>
-                            <content:encoded><![CDATA[<!-- wp:paragraph --><p>${articles[i]}</p><!-- /wp:paragraph -->]]></content:encoded>
+                            <content:encoded><![CDATA[<!-- wp:paragraph --><p>${articles[i].text}</p><!-- /wp:paragraph -->]]></content:encoded>
                             <excerpt:encoded><![CDATA[]]></excerpt:encoded>
 
                             <wp:comment_status><![CDATA[open]]></wp:comment_status>
@@ -393,7 +303,6 @@ function Dashboard() {
 			                <wp:post_type><![CDATA[post]]></wp:post_type>
 			                <wp:post_password><![CDATA[]]></wp:post_password>
 			                <wp:is_sticky>0</wp:is_sticky>
-			                <category domain="category" nicename="firstdraftfactory"><![CDATA[FirstDraftFactory]]></category>
                         </item>    
                         `
         }
@@ -535,7 +444,7 @@ function Dashboard() {
                                     articles.map((val: any, index: number) => {
                                         return (
                                             <div key={index} className='flex gap-5'>
-                                                <input type="checkbox" value={val.text} onChange={handleSelectedArticles} name="" id={String(index)} />
+                                                <input type="checkbox" value={val.title + '(^^^)' + val.text} onChange={handleSelectedArticles} name="" id={String(index)} />
                                                 <label htmlFor={String(index)} className='flex-grow'>
                                                     <div className='mb-2 mt-2 flex justify-between items-center bg-gray-300 text-zinc-800 font-semibold'>
                                                         <div className='line-clamp-1 pl-5 w-[80%]'>{val.text}</div>
@@ -577,7 +486,7 @@ function Dashboard() {
                                                         val.articles.map((val2: any, index: number) => {
                                                             return (
                                                                 <div key={index} className='flex gap-5'>
-                                                                    <input type="checkbox" value={val2.article} onChange={handleSelectedHistoryArticles} name="" id={`${val.time}${String(index)}`} />
+                                                                    <input type="checkbox" value={val2.title + '(^^^)' + val2.article} onChange={handleSelectedHistoryArticles} name="" id={`${val.time}${String(index)}`} />
                                                                     <label htmlFor={`${val.time}${String(index)}`} className='flex-grow'>
                                                                         <div className='mb-2 mt-2 flex justify-between items-center bg-gray-300 text-zinc-800 font-semibold'>
                                                                             <div className='line-clamp-1 pl-5 w-[80%]'>{val2.article}</div>
