@@ -377,11 +377,23 @@ function Dashboard() {
         for (let i = 0; i < articles.length; i++) {
             xmlContent += `
                         <item>
-                            <title><![CDATA[This is an Article]]></title>
+                            <title><![CDATA[history of pakistan ]]></title>
+                            <pubDate>Wed, 28 Dec 2022 20:55:39 +0000</pubDate>
                             <dc:creator><![CDATA[wpx_]]></dc:creator>
                             <description></description>
                             <content:encoded><![CDATA[<!-- wp:paragraph --><p>${articles[i]}</p><!-- /wp:paragraph -->]]></content:encoded>
                             <excerpt:encoded><![CDATA[]]></excerpt:encoded>
+
+                            <wp:comment_status><![CDATA[open]]></wp:comment_status>
+			                <wp:ping_status><![CDATA[open]]></wp:ping_status>
+			                <wp:post_name><![CDATA[history-of-pakistan-]]></wp:post_name>
+			                <wp:status><![CDATA[publish]]></wp:status>
+			                <wp:post_parent>0</wp:post_parent>
+			                <wp:menu_order>0</wp:menu_order>
+			                <wp:post_type><![CDATA[post]]></wp:post_type>
+			                <wp:post_password><![CDATA[]]></wp:post_password>
+			                <wp:is_sticky>0</wp:is_sticky>
+			                <category domain="category" nicename="firstdraftfactory"><![CDATA[FirstDraftFactory]]></category>
                         </item>    
                         `
         }
@@ -395,6 +407,7 @@ function Dashboard() {
                             >
                                 <channel>
                                     <wp:wxr_version>1.2</wp:wxr_version>
+                                    <generator>https://wordpress.org/?v=6.1.1</generator>
                                     ${xmlContent}
                                 </channel>
                             </rss>`;
