@@ -288,6 +288,7 @@ function Dashboard() {
             xmlContent += `
                         <item>
                             <title><![CDATA[${articles[i].title}]]></title>
+                            <link>https://google.com/search?q=${articles[i].title.replaceAll(" ", "-")}-/</link>
                             <pubDate>Wed, 28 Dec 2022 20:55:39 +0000</pubDate>
                             <dc:creator><![CDATA[wpx_]]></dc:creator>
                             <description></description>
@@ -296,7 +297,7 @@ function Dashboard() {
 
                             <wp:comment_status><![CDATA[open]]></wp:comment_status>
 			                <wp:ping_status><![CDATA[open]]></wp:ping_status>
-			                <wp:post_name><![CDATA[history-of-pakistan-]]></wp:post_name>
+			                <wp:post_name><![CDATA[${articles[i].title.replaceAll(" ", "-")}]]></wp:post_name>
 			                <wp:status><![CDATA[publish]]></wp:status>
 			                <wp:post_parent>0</wp:post_parent>
 			                <wp:menu_order>0</wp:menu_order>
